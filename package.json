@@ -1,0 +1,11 @@
+{
+  "name": "decentralized-streaming-platform",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "echo Run individual package dev servers",
+    "build": "echo Build all packages"
+  }
+}

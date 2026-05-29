@@ -1,0 +1,12 @@
+{
+  "title": "Stream Manifest",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "variants": {
+      "type": "array"
+    }
+  }
+}

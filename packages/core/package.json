@@ -1,0 +1,29 @@
+{
+  "name": "@dsp/core",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@libp2p/webtransport": "^2.0.0",
+    "@libp2p/webrtc": "^5.0.0",
+    "@libp2p/kad-dht": "^14.0.0",
+    "@libp2p/identify": "^3.0.0",
+    "@libp2p/noise": "^6.0.0",
+    "@libp2p/yamux": "^7.0.0",
+    "@chainsafe/libp2p-noise": "^15.0.0",
+    "@chainsafe/libp2p-yamux": "^7.0.0",
+    "libp2p": "^2.0.0",
+    "multiformats": "^13.0.0",
+    "uint8arrays": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}
