@@ -7,40 +7,47 @@ import { kadDHT } from '@libp2p/kad-dht'
 import { identify } from '@libp2p/identify'
 import { CID } from 'multiformats/cid'
 import { PeerReputationManager } from '../reputation/PeerReputationManager'
+import { PredictivePeerScorer } from '../reputation/PredictivePeerScorer'
 import { MeshLoader } from '../realtime/MeshLoader'
 import { RelayManager } from '../realtime/RelayManager'
+import { WebCodecsPipeline } from '../realtime/WebCodecsPipeline'
+import { ErasureCoder } from '../realtime/ErasureCoder'
+import { SwarmPersister } from '../persistence/SwarmPersister'
+import type { TransportAdapter } from '../transport/TransportAdapter'
+import { WebTransportAdapter } from '../transport/WebTransportAdapter'
+import { WebRTCAdapter } from '../transport/WebRTCAdapter'
 
 export class DSPNode {
   public node: any
   public peerId: string = ''
   public reputation: PeerReputationManager
+  public predictiveScorer: PredictivePeerScorer
   public meshLoader: MeshLoader | null = null
   public relayManager: RelayManager
+  public webCodecs: WebCodecsPipeline
+  public erasureCoder: ErasureCoder
+  public swarm: SwarmPersister
+  public transports: TransportAdapter[] = []
 
   constructor() {
     this.reputation = new PeerReputationManager()
+    this.predictiveScorer = new PredictivePeerScorer()
     this.relayManager = new RelayManager(this)
+    this.webCodecs = new WebCodecsPipeline()
+    this.erasureCoder = new ErasureCoder()
+    this.swarm = new SwarmPersister()
   }
 
   async start() {
     this.node = await createLibp2p({
       addresses: {
-        listen: [
-          '/webtransport/ceramic',
-          '/webrtc'
-        ]
+        listen: ['/webtransport/ceramic', '/webrtc']
       },
-      transports: [
-        webTransport(),
-        webRTC()
-      ],
+      transports: [webTransport(), webRTC()],
       connectionEncryption: [noise()],
       streamMuxers: [yamux()],
       services: {
-        dht: kadDHT({
-          clientMode: true,
-          protocol: '/dsp/kad/1.0.0'
-        }),
+        dht: kadDHT({ clientMode: true, protocol: '/dsp/kad/1.0.0' }),
         identify: identify()
       }
     })
@@ -50,6 +57,12 @@ export class DSPNode {
 
     this.reputation.startDecayInterval()
     this.meshLoader = new MeshLoader(this, this.reputation)
+    await this.webCodecs.initialize()
+
+    this.transports = [
+      new WebTransportAdapter(),
+      new WebRTCAdapter(),
+    ]
 
     console.log(`🚀 DSP Node started with Peer ID: ${this.peerId}`)
 
@@ -66,6 +79,7 @@ export class DSPNode {
 
   async stop() {
     await this.node?.stop()
+    this.webCodecs.destroy()
   }
 
   async findProviders(cid: CID) {
