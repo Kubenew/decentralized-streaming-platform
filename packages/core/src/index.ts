@@ -2,6 +2,7 @@ export { DSPNode } from './node/DSPNode';
 export { MeshLoader } from './realtime/MeshLoader';
 export { PeerReputationManager } from './reputation/PeerReputationManager';
 export { RelayManager } from './realtime/RelayManager';
+export { TorrentBridge } from './torrent/TorrentBridge';
 export { VideoChunker, type VideoChunk } from './chunking';
 export { ManifestManager } from './manifest/VideoManifest';
 export type { VideoManifest, ChunkInfo, BitrateVariant } from './manifest/VideoManifest';

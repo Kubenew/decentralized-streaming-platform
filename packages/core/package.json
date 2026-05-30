@@ -1,6 +1,6 @@
 {
   "name": "@dsp/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,8 +14,6 @@
     "@libp2p/webrtc": "^5.0.0",
     "@libp2p/kad-dht": "^14.0.0",
     "@libp2p/identify": "^3.0.0",
-    "@libp2p/noise": "^6.0.0",
-    "@libp2p/yamux": "^7.0.0",
     "@chainsafe/libp2p-noise": "^15.0.0",
     "@chainsafe/libp2p-yamux": "^7.0.0",
     "libp2p": "^2.0.0",
